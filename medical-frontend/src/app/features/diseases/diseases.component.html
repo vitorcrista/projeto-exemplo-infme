@@ -1,0 +1,37 @@
+<h2>Doenças</h2>
+
+<div class="add-form">
+  <h3>Nova doença</h3>
+  <label>
+    Nome
+    <input type="text" [(ngModel)]="newDisease.name" name="name" placeholder="Ex.: Diabetes tipo 2" />
+  </label>
+  <label>
+    Descrição
+    <input type="text" [(ngModel)]="newDisease.description" name="description" placeholder="breve descrição" />
+  </label>
+  <div class="actions">
+    <button type="button" class="primary" (click)="add()">Adicionar</button>
+  </div>
+</div>
+
+<ul class="diseases">
+  @for (disease of diseases; track disease.id) {
+    <li>
+      <a [routerLink]="['/diseases', disease.id]">
+        <div class="name">{{ disease.name }}</div>
+        @if (disease.description) {
+          <div class="desc">{{ disease.description }}</div>
+        }
+      </a>
+      <button
+        type="button"
+        class="delete"
+        title="remover doença"
+        (click)="remove(disease)"
+      >
+        remover
+      </button>
+    </li>
+  }
+</ul>

@@ -1,0 +1,27 @@
+@if (disease) {
+  <h2>{{ disease.name }}</h2>
+
+  <div class="detail-card">
+    <div class="meta">ID {{ disease.id }}</div>
+
+    <div class="field">
+      <label for="name">Nome</label>
+      <input id="name" [(ngModel)]="disease.name" name="name" />
+    </div>
+
+    <div class="field">
+      <label for="description">Descrição</label>
+      <textarea
+        id="description"
+        [(ngModel)]="disease.description"
+        name="description"
+        rows="4"
+      ></textarea>
+    </div>
+
+    <div class="actions">
+      <button type="button" (click)="goBack()">Cancelar</button>
+      <button type="button" class="primary" (click)="save()">Guardar</button>
+    </div>
+  </div>
+}

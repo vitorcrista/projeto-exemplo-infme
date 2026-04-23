@@ -1,0 +1,45 @@
+@if (patient) {
+  <h2>{{ patient.firstName }} {{ patient.lastName }}</h2>
+
+  <div class="detail-card">
+    <div class="meta">ID {{ patient.id }}</div>
+
+    <div class="row">
+      <div class="field">
+        <label for="firstName">Nome</label>
+        <input id="firstName" [(ngModel)]="patient.firstName" name="firstName" />
+      </div>
+      <div class="field">
+        <label for="lastName">Apelido</label>
+        <input id="lastName" [(ngModel)]="patient.lastName" name="lastName" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="dob">Data nascimento</label>
+        <input id="dob" type="date" [(ngModel)]="dateOfBirthInput" name="dateOfBirth" />
+      </div>
+      <div class="field">
+        <label for="gender">Género</label>
+        <select id="gender" [(ngModel)]="patient.gender" name="gender">
+          <option value="F">Feminino</option>
+          <option value="M">Masculino</option>
+          <option value="O">Outro</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="sns">Nº SNS</label>
+      <input id="sns" [(ngModel)]="patient.snsNumber" name="snsNumber" />
+    </div>
+
+    <div class="actions">
+      <button type="button" (click)="goBack()">Cancelar</button>
+      <button type="button" class="primary" (click)="save()">Guardar</button>
+    </div>
+  </div>
+
+  <app-patient-diseases [patientId]="patient.id!" />
+}

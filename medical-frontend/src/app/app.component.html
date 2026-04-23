@@ -1,0 +1,16 @@
+@if (authService.doctor(); as doctor) {
+  <header class="app-header">
+    <h1>{{ title }}</h1>
+    <div class="user-info">
+      <span class="doctor-name">{{ doctor.name }}</span>
+      <button type="button" (click)="logout()">Sair</button>
+    </div>
+  </header>
+
+  <nav>
+    <a routerLink="/patients" routerLinkActive="active">Pacientes</a>
+    <a routerLink="/diseases" routerLinkActive="active">Doenças</a>
+  </nav>
+}
+
+<router-outlet />

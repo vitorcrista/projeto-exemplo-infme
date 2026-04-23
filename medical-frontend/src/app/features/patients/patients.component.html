@@ -1,0 +1,51 @@
+<h2>Pacientes</h2>
+
+<div class="add-form">
+  <h3>Novo paciente</h3>
+  <label>
+    Nome
+    <input type="text" [(ngModel)]="newPatient.firstName" name="firstName" placeholder="Ana" />
+  </label>
+  <label>
+    Apelido
+    <input type="text" [(ngModel)]="newPatient.lastName" name="lastName" placeholder="Silva" />
+  </label>
+  <label>
+    Data nascimento
+    <input type="date" [(ngModel)]="newPatient.dateOfBirth" name="dateOfBirth" />
+  </label>
+  <label>
+    Género
+    <select [(ngModel)]="newPatient.gender" name="gender">
+      <option value="F">Feminino</option>
+      <option value="M">Masculino</option>
+      <option value="O">Outro</option>
+    </select>
+  </label>
+  <label>
+    Nº SNS
+    <input type="text" [(ngModel)]="newPatient.snsNumber" name="snsNumber" placeholder="9 dígitos" />
+  </label>
+  <div class="actions">
+    <button type="button" class="primary" (click)="add()">Adicionar</button>
+  </div>
+</div>
+
+<ul class="patients">
+  @for (patient of patients; track patient.id) {
+    <li>
+      <a [routerLink]="['/detail', patient.id]">
+        <span class="badge">{{ patient.snsNumber }}</span>
+        {{ patient.firstName }} {{ patient.lastName }}
+      </a>
+      <button
+        type="button"
+        class="delete"
+        title="remover paciente"
+        (click)="remove(patient)"
+      >
+        remover
+      </button>
+    </li>
+  }
+</ul>

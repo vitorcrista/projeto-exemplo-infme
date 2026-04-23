@@ -1,0 +1,60 @@
+<div class="section-header">
+  <h3>Diagnósticos</h3>
+  <button type="button" (click)="toggleForm()">
+    {{ showForm ? 'Cancelar' : 'Adicionar' }}
+  </button>
+</div>
+
+@if (showForm) {
+  <div class="add-form">
+    <label>
+      Doença
+      <select [(ngModel)]="draft.diseaseId" name="diseaseId">
+        <option value="" disabled>Escolher…</option>
+        @for (d of availableCatalog(); track d.id) {
+          <option [value]="d.id">{{ d.name }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      Data diagnóstico
+      <input type="date" [(ngModel)]="draft.dateOfDiagnosis" name="dateOfDiagnosis" />
+    </label>
+    <label>
+      Estado
+      <select [(ngModel)]="draft.status" name="status">
+        @for (s of statusOptions; track s) {
+          <option [value]="s">{{ statusLabel[s] }}</option>
+        }
+      </select>
+    </label>
+    <div class="actions">
+      <button type="button" class="primary" (click)="add()">Guardar</button>
+    </div>
+  </div>
+}
+
+@if (diagnoses.length === 0) {
+  <p class="empty">Sem diagnósticos registados.</p>
+} @else {
+  <ul class="diagnoses">
+    @for (entry of diagnoses; track entry.id) {
+      <li>
+        <div class="info">
+          <div class="name">{{ entry.disease.name }}</div>
+          <div class="meta">{{ entry.dateOfDiagnosis | date: 'yyyy-MM-dd' }}</div>
+        </div>
+        <select
+          class="status"
+          [value]="entry.status"
+          (change)="changeStatus(entry, $any($event.target).value)"
+        >
+          @for (s of statusOptions; track s) {
+            <option [value]="s">{{ statusLabel[s] }}</option>
+          }
+        </select>
+        <button type="button" class="delete" (click)="remove(entry)">remover</button>
+      </li>
+    }
+  </ul>
+}
