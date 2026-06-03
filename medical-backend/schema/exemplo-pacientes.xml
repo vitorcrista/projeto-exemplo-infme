@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<medicalExport exportedAt="2026-06-03T10:30:00.000Z" patientCount="2">
+  <patient id="665f1a2b3c4d5e6f7a8b9c0d" snsNumber="123456789" gender="F">
+    <firstName>Ana</firstName>
+    <lastName>Silva</lastName>
+    <dateOfBirth>1990-05-12</dateOfBirth>
+    <diseases>
+      <diagnosis id="665f1a2b3c4d5e6f7a8b9c1a" status="chronic">
+        <name>Diabetes tipo 2</name>
+        <description>Doença metabólica crónica.</description>
+        <dateOfDiagnosis>2019-03-20</dateOfDiagnosis>
+      </diagnosis>
+      <diagnosis id="665f1a2b3c4d5e6f7a8b9c1b" status="resolved">
+        <name>Gripe</name>
+        <dateOfDiagnosis>2024-01-08</dateOfDiagnosis>
+      </diagnosis>
+    </diseases>
+  </patient>
+  <patient id="665f1a2b3c4d5e6f7a8b9c0e" snsNumber="987654321" gender="M">
+    <firstName>João</firstName>
+    <lastName>Costa</lastName>
+    <dateOfBirth>1978-11-30</dateOfBirth>
+    <diseases/>
+  </patient>
+</medicalExport>

@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { Patient } from '../../core/models/patient.model';
-import { PatientService } from '../../core/services/patient.service';
+import { ImportResult, PatientService } from '../../core/services/patient.service';
 
 @Component({
   selector: 'app-patients',
@@ -17,6 +17,9 @@ export class PatientsComponent implements OnInit {
 
   patients: Patient[] = [];
   newPatient: Patient = this.blankPatient();
+
+  importing = false;
+  importResult: ImportResult | null = null;
 
   ngOnInit(): void {
     this.load();
@@ -43,6 +46,58 @@ export class PatientsComponent implements OnInit {
     if (!patient.id) return;
     this.patients = this.patients.filter((p) => p.id !== patient.id);
     this.patientService.delete(patient.id).subscribe();
+  }
+
+  exportXml(): void {
+    this.patientService.exportXml().subscribe((blob) => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pacientes.xml';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  deleteAll(): void {
+    if (
+      !confirm(
+        'Apagar TODOS os pacientes e respetivos diagnósticos? Esta ação é irreversível.'
+      )
+    ) {
+      return;
+    }
+    this.patientService.deleteAll().subscribe((deleted) => {
+      this.patients = [];
+      this.importResult = null;
+      if (deleted) {
+        this.importResult = {
+          ok: true,
+          message: `Apagados ${deleted.patients} pacientes e ${deleted.diagnoses} diagnósticos.`
+        };
+      }
+      this.load();
+    });
+  }
+
+  onImportFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.importing = true;
+    this.importResult = null;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.patientService.importXml(String(reader.result)).subscribe((result) => {
+        this.importResult = result;
+        this.importing = false;
+        input.value = ''; // permite reimportar o mesmo ficheiro
+        if (result.ok) this.load(); // refresca a lista após importar
+      });
+    };
+    reader.readAsText(file);
   }
 
   private blankPatient(): Patient {

@@ -1,4 +1,45 @@
-<h2>Pacientes</h2>
+<div class="page-header">
+  <h2>Pacientes</h2>
+  <div class="header-actions">
+    <button type="button" class="primary" (click)="exportXml()">Exportar XML</button>
+    <label class="import-btn" [class.disabled]="importing">
+      {{ importing ? 'A importar…' : 'Importar XML' }}
+      <input type="file" accept=".xml,application/xml,text/xml" (change)="onImportFileSelected($event)" [disabled]="importing" hidden />
+    </label>
+    <button type="button" class="danger" (click)="deleteAll()" [disabled]="patients.length === 0">
+      Apagar tudo
+    </button>
+  </div>
+</div>
+
+@if (importResult) {
+  @if (importResult.ok && importResult.summary) {
+    <div class="import-result success">
+      <strong>Importação concluída.</strong>
+      Pacientes: {{ importResult.summary.patientsCreated }} criados, {{ importResult.summary.patientsUpdated }} atualizados ·
+      Doenças: {{ importResult.summary.diseasesCreated }} novas ·
+      Diagnósticos: {{ importResult.summary.diagnosesCreated }} criados, {{ importResult.summary.diagnosesUpdated }} atualizados.
+    </div>
+  } @else if (importResult.ok) {
+    <div class="import-result success">
+      <strong>{{ importResult.message }}</strong>
+    </div>
+  } @else {
+    <div class="import-result error">
+      <strong>{{ importResult.message }}</strong>
+      @if (importResult.validationErrors?.length) {
+        <ul>
+          @for (err of importResult.validationErrors; track $index) {
+            <li>
+              @if (err.line) { <span class="line">linha {{ err.line }}:</span> }
+              {{ err.message }}
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
+}
 
 <div class="add-form">
   <h3>Novo paciente</h3>

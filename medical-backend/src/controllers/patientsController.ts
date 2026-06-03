@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import Patient from '../models/Patient';
+import PatientDisease from '../models/PatientDisease';
 
 export async function list(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -49,6 +50,28 @@ export async function update(req: Request, res: Response, next: NextFunction): P
       return;
     }
     res.json(patient);
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Apaga todos os pacientes do médico autenticado e os respetivos diagnósticos.
+ * Não toca no catálogo de doenças (partilhado entre médicos).
+ */
+export async function removeAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const patients = await Patient.find({ doctor: req.doctorId }).select('_id');
+    const ids = patients.map((p) => p._id);
+    const diagnoses = await PatientDisease.deleteMany({ patient: { $in: ids } });
+    const removed = await Patient.deleteMany({ doctor: req.doctorId });
+    res.json({
+      ok: true,
+      deleted: {
+        patients: removed.deletedCount ?? 0,
+        diagnoses: diagnoses.deletedCount ?? 0
+      }
+    });
   } catch (err) {
     next(err);
   }

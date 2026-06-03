@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Raiz: exportação de pacientes de um médico, com os diagnósticos. -->
+  <xs:element name="medicalExport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="patient" type="PatientType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="exportedAt" type="xs:dateTime" use="required"/>
+      <xs:attribute name="patientCount" type="xs:nonNegativeInteger" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="PatientType">
+    <xs:sequence>
+      <xs:element name="firstName" type="NonEmptyString"/>
+      <xs:element name="lastName" type="NonEmptyString"/>
+      <xs:element name="dateOfBirth" type="xs:date"/>
+      <xs:element name="diseases" type="DiseasesType"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="snsNumber" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="\d{9}"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="gender" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="M"/>
+          <xs:enumeration value="F"/>
+          <xs:enumeration value="O"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="DiseasesType">
+    <xs:sequence>
+      <xs:element name="diagnosis" type="DiagnosisType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="DiagnosisType">
+    <xs:sequence>
+      <xs:element name="name" type="NonEmptyString"/>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="dateOfDiagnosis" type="xs:date"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="status" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="active"/>
+          <xs:enumeration value="resolved"/>
+          <xs:enumeration value="chronic"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:simpleType name="NonEmptyString">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
