@@ -14,5 +14,5 @@ export const routes: Routes = [
   { path: 'detail/:id', component: PatientDetailComponent, canActivate: [authGuard] },
   { path: 'diseases', component: DiseasesComponent, canActivate: [authGuard] },
   { path: 'diseases/:id', component: DiseaseDetailComponent, canActivate: [authGuard] },
-  { path: '**', redirectTo: '/patients' }
+  { path: '**', redirectTo: '/patients' },
 ];
